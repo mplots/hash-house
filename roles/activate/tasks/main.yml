@@ -1,0 +1,13 @@
+- name: Enable/Disable miners
+  ansible.builtin.service:
+    name: "{{ item.key }}"
+    enabled: "{{ miners[item.key].enabled }}"
+  loop: "{{ miners | dict2items }}"
+  become: yes
+
+- name: Start/Stop miners
+  ansible.builtin.service:
+    name: "{{ item.key }}"
+    state: "{{ miners[item.key].state }}"
+  loop: "{{ miners | dict2items }}"
+  become: yes

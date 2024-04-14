@@ -1,0 +1,15 @@
+[Unit]
+Description=Qubic LI Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+ExecStart=/opt/miners/qubic-li/qli-Service.sh
+StandardOutput=append:/var/log/qubic-li.log
+StandardError=append:/var/log/qubic-li.log
+Restart=always
+User=qubic-li
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+hashhouse:
+  hosts:
+    heisenberg:
+      ansible_host: 192.168.8.200
+      microarchitecture: znver3
+    jassie:
+      ansible_host: 192.168.8.201
+      microarchitecture: znver3
+
+ryzen3950:
+  hosts: 
+    heisenberg:
+    jassie:

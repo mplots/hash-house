@@ -1,0 +1,15 @@
+[Unit]
+Description=Qubic Solutions Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+ExecStart=qubic-solutions -t {{ ansible_processor_cores * ansible_processor_threads_per_core }} -i {{ qubic_wallet }} -l {{ inventory_hostname }}
+StandardOutput=append:/var/log/qubic-solutions.log
+StandardError=append:/var/log/qubic-solutions.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

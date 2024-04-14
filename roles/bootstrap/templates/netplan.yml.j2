@@ -1,0 +1,11 @@
+network:
+  ethernets:
+    eth0:
+      dhcp4: false
+      addresses:
+        - {{ set_ipv4_address | default(ansible_default_ipv4.address) }}/20
+      routes:
+        - to: 0.0.0.0/0
+          via: {{ set_ipv4_gateway | default(ansible_default_ipv4.gateway) }}
+  version: 2
+  

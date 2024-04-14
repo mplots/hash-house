@@ -1,0 +1,36 @@
+- name: Stop qubic-solutions service
+  ansible.builtin.service:
+    name: qubic-solutions
+    state: stopped
+  ignore_errors: yes
+  become: yes
+
+- name: Download qubic solutions miner
+  ansible.builtin.get_url:
+    url: "https://github.com/Qubic-Solutions/rqiner-builds/releases/download/{{ version }}/rqiner-x86-{{ microarchitecture }}"
+    dest: "/usr/bin/qubic-solutions"
+    mode: u=rwx,g=rx,o=rx
+    owner: root
+    group: root
+  become: yes
+
+- name: Create qubic solutions service file
+  ansible.builtin.template:
+    src: qubic-solutions.service.j2
+    dest: /etc/systemd/system/qubic-solutions.service
+    mode: u=rw,g=r,o=rw
+    owner: root
+    group: root
+  become: yes
+
+- name: Enable qubic-solutions service
+  ansible.builtin.service:
+    name: qubic-solutions
+    enabled: "{{ miners['qubic-solutions'].enabled }}"
+  become: yes
+
+- name: Start qubic-solutions service
+  ansible.builtin.service:
+    name: qubic-solutions
+    state: "{{ miners['qubic-solutions'].state }}"
+  become: yes

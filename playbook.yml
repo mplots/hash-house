@@ -1,0 +1,26 @@
+- hosts: hashhouse
+  user: ubuntu
+  roles:
+    - role: bootstrap
+      tags:
+        - bootstrap
+        - bootstrap-new
+
+    - role: qubic-solutions
+      tags:
+        - bootstrap
+        - bootstrap-solutions
+
+    - role: qubic-li
+      tags:
+        - bootstrap
+        - bootstrap-li
+
+    - role: xmrig
+      tags:
+        - bootstrap
+        - bootstrap-xmrig
+
+    - role: activate
+      tags:
+        - activate
