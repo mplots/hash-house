@@ -1,0 +1,16 @@
+[Unit]
+Description=SRB Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+WorkingDirectory=/opt/miners/{{ miner_name }}
+ExecStart=/opt/miners/{{ miner_name }}/SRBMiner-Multi-2-5-4/SRBMiner-MULTI -a yespower  --pool {{ miners.srb.url }} --wallet {{ miners.srb.user }} --worker {{ inventory_hostname }}
+StandardOutput=append:/opt/miners/{{ miner_name }}/miner.log
+StandardError=append:/opt/miners/{{ miner_name }}/miner.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

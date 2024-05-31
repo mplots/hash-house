@@ -1,0 +1,38 @@
+- name: Create xelis node user
+  ansible.builtin.user:
+    name: xelis-node
+  become: yes
+
+- name: Create xelis node directory
+  ansible.builtin.file:
+    path: /opt/miners/xelis-node
+    state: directory
+    mode: u=rwx,g=rwx,o=
+    owner: xelis-node
+    group: miners
+  become: yes
+
+- name: Copy Dockerfile
+  ansible.builtin.copy:
+    src: Dockerfile
+    dest: /opt/miners/xelis-node
+    mode: u=r,g=r,o=
+    owner: xelis-node
+    group: miners
+  register: dockerfile
+  become: yes
+
+- name: Build image xelis-node
+  community.docker.docker_image:
+    name: xelis-node:latest
+    build:
+      path: /opt/miners/xelis-node
+    source: build
+    force_source: "{{ dockerfile.changed }}"
+  become: yes
+
+- name: Run xelis-node container
+  docker_container:
+    name: xelis-node
+    image: xelis-node:latest
+  become: yes

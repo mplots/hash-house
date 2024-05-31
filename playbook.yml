@@ -1,26 +1,82 @@
-- hosts: hashhouse
+- hosts: octopus
   user: ubuntu
   roles:
-    - role: bootstrap
+    - role: bootstrap-os
       tags:
         - bootstrap
-        - bootstrap-new
+        - bootstrap-os
+
+    - role: bootstrap-miners
+      tags:
+        - bootstrap
+        - bootstrap-miners
 
     - role: qubic-solutions
       tags:
         - bootstrap
-        - bootstrap-solutions
+        - qubic-solutions
 
     - role: qubic-li
       tags:
         - bootstrap
-        - bootstrap-li
+        - qubic-li
 
     - role: xmrig
       tags:
         - bootstrap
-        - bootstrap-xmrig
+        - xmrig
+
+    - role: rplant
+      tags:
+        - bootstrap
+        - rplant
+
+    - role: srb
+      tags:
+        - bootstrap
+        - srb
+
+    - role: qubic-apool
+      tags:
+        - bootstrap
+        - qubic-apool
+
+    - role: qubic-pro
+      tags:
+        - bootstrap
+        - qubic-pro
+
+    - role: qubic-ninja
+      tags:
+        - bootstrap
+        - qubic-ninja
+
+    - role: cpuminer-flex
+      tags:
+        - bootstrap
+        - cpuminer-flex
 
     - role: activate
       tags:
         - activate
+        - always
+
+# - hosts: skyler
+#   user: ubuntu
+#   roles:
+#     - role: bootstrap-os
+#       tags:
+#         - bootstrap
+#         - bootstrap-new
+
+#     - role: xelis-node
+#       tags:
+#         - xelis-node
+
+#     - role: xelis-proxy
+#       tags:
+#         - xelis-proxy
+
+#     - role: docker
+#       tags: 
+#         - docker

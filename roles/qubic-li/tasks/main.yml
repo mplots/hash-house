@@ -1,54 +1,3 @@
-- name: Stop qubic-li service
-  ansible.builtin.service:
-    name: qubic-li
-    state: stopped
-  ignore_errors: yes
-  become: yes
-
-- name: Create qubic-li user
-  ansible.builtin.user:
-    name: qubic-li
-  become: yes
-
-- name: Create qubic-li miner directory
-  ansible.builtin.file:
-    path: /opt/miners/qubic-li
-    state: directory
-    mode: u=rwx,g=rwx,o=
-    owner: qubic-li
-    group: miners
-  become: yes
-
-- name: Download qubic li miner
-  ansible.builtin.get_url:
-    url: "https://dl.qubic.li/downloads/qli-Client-{{ version }}-Linux-x64.tar.gz"
-    dest: "/opt/miners/qubic-li/qli-Client-{{ version }}-Linux-x64.tar.gz"
-    mode: u=r,g=r,o=
-    owner: qubic-li
-    group: miners
-  register: downloaded
-  become: yes
-
-- name: Extract qubic li miner
-  ansible.builtin.unarchive:
-    src: "/opt/miners/qubic-li/qli-Client-{{ version }}-Linux-x64.tar.gz"
-    dest: /opt/miners/qubic-li
-    mode: u=rx,g=rx,o=
-    owner: qubic-li
-    group: miners
-    remote_src: yes
-  when: downloaded.changed
-  become: yes
-
-- name: Create qubic li configuration file
-  ansible.builtin.template:
-    src: settings.json.j2
-    dest: "/opt/miners/qubic-li/appsettings.json"
-    mode: u=r,g=r,o=
-    owner: qubic-li
-    group: miners
-  become: yes
-
 - name: Copy service shell script
   ansible.builtin.copy:
     src: qli-Service.sh
@@ -58,28 +7,8 @@
     group: miners
   become: yes
 
-- name: Create qubic li service file
-  ansible.builtin.template:
-    src: qubic-li.service.j2
-    dest: /etc/systemd/system/qubic-li.service
-    mode: u=rw,g=r,o=rw
-    owner: root
-    group: root
-  become: yes
-
+#TODO: use https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html
 - name: Update number of huge pages
   ansible.builtin.shell:
     cmd: "/sbin/sysctl -w vm.nr_hugepages={{ 92 * ansible_processor_cores * ansible_processor_threads_per_core }}"
-  become: yes
-
-- name: Enable qubic-li service
-  ansible.builtin.service:
-    name: qubic-li
-    enabled: "{{ miners['qubic-li'].enabled }}"
-  become: yes
-
-- name: Change state of qubic-li service
-  ansible.builtin.service:
-    name: qubic-li
-    state: "{{ miners['qubic-li'].state }}"
   become: yes

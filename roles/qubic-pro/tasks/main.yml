@@ -1,0 +1,60 @@
+- name: Stop qubic-pro service
+  ansible.builtin.service:
+    name: qubic-pro
+    state: stopped
+  ignore_errors: yes
+  become: yes
+
+- name: Create qubic-pro user
+  ansible.builtin.user:
+    name: qubic-pro
+  become: yes
+
+- name: Create qubic-pro miner directory
+  ansible.builtin.file:
+    path: /opt/miners/qubic-pro
+    state: directory
+    mode: u=rwx,g=rwx,o=
+    owner: qubic-pro
+    group: miners
+  become: yes
+
+- name: Download qubic pro miner
+  ansible.builtin.get_url:
+    url: "https://dl.qubicmine.pro/qpro-miner-linux-v{{ version}}.zip"
+    dest: "/opt/miners/qubic-pro/qpro-miner-linux-v{{ version}}.zip"
+    mode: u=r,g=r,o=
+    owner: qubic-pro
+    group: miners
+  register: downloaded
+  become: yes
+
+- name: Extract qubic pro miner
+  ansible.builtin.unarchive:
+    src: "/opt/miners/qubic-pro/qpro-miner-linux-v{{ version}}.zip"
+    dest: /opt/miners/qubic-pro
+    mode: u=rx,g=rx,o=
+    owner: qubic-pro
+    group: miners
+    remote_src: yes
+  when: downloaded.changed
+  become: yes
+
+- name: Update qubic pro service file
+  ansible.builtin.template:
+    src: qubicmine.json.j2
+    dest: /opt/miners/qubic-pro/qubicmine.json
+    mode: u=rx,g=rx,o=
+    owner: qubic-pro
+    group: miners
+  become: yes
+
+- name: Update qubic pro service file
+  ansible.builtin.template:
+    src: qubic-pro.service.j2
+    dest: /etc/systemd/system/qubic-pro.service
+    mode: u=rw,g=r,o=rw
+    owner: root
+    group: root
+  become: yes
+

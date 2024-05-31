@@ -1,0 +1,4 @@
+dependencies:
+  - role: base-miner
+    miner_name: srb
+    miner_download_url: https://github.com/doktor83/SRBMiner-Multi/releases/download/2.5.4/SRBMiner-Multi-2-5-4-Linux.tar.gz

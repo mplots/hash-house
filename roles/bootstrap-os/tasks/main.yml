@@ -1,0 +1,69 @@
+- name: Bootsrap
+  block:
+    - name: Set a hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: update grub file
+      ansible.builtin.copy:
+        src: grub
+        dest: /etc/default/grub
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      register: grub_file
+
+    - name: update grub
+      ansible.builtin.shell:
+        cmd: update-grub
+      when: grub_file.changed
+      notify: reboot server
+
+    - name: update netplan file
+      ansible.builtin.template:
+        src: netplan.yml.j2
+        dest: /etc/netplan/00-installer-config.yaml
+        mode: u=rw,g=r,o=r
+        owner: root
+        group: root
+      notify: reboot server
+
+    - name: Create miners group
+      ansible.builtin.group:
+        name: miners
+        system: yes
+        state: present
+
+    - name: Add ubuntu user to miners group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: miners
+        append: yes
+
+    - name: Create a miner directory
+      ansible.builtin.file:
+        path: /opt/miners
+        state: directory
+        mode: u=rwx,g=rwx,o=
+        owner: ubuntu
+        group: miners
+
+    - name: Disable root password in sudoers file
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: '^ubuntu'
+        line: 'ubuntu ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'
+      notify: reboot server
+
+    - name: Install dependencies
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - unzip
+        - git
+        - curl
+        - htop
+  become: yes

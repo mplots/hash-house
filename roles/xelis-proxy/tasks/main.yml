@@ -1,0 +1,78 @@
+- name: Create xelis proxy user
+  ansible.builtin.user:
+    name: xelis-proxy
+  become: yes
+
+- name: Create xelis proxy directory
+  ansible.builtin.file:
+    path: /opt/miners/xelis-proxy
+    state: directory
+    mode: u=rwx,g=rwx,o=
+    owner: xelis-proxy
+    group: miners
+  become: yes
+
+- name: Install xelis proxy build dependencies
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - git
+  become: yes
+
+#- name: Download go
+
+# - name: Download xelis proxy
+#   ansible.builtin.get_url:
+#     url: "https://github.com/xelpool/xatum-proxy/releases/download/v{{ version }}/xatum-proxy-linux.tar.gz"
+#     dest: "/opt/miners/xelis-proxy/xatum-proxy-linux.tar.gz"
+#     mode: u=r,g=r,o=
+#     owner: xelis-proxy
+#     group: miners
+#   register: downloaded
+#   become: yes
+
+# - name: Extract xelis proxy
+#   ansible.builtin.unarchive:
+#     src: "/opt/miners/xelis-proxy/xatum-proxy-linux.tar.gz"
+#     dest: /opt/miners/xelis-proxy
+#     mode: u=rx,g=rx,o=
+#     owner: xelis-proxy
+#     group: miners
+#     remote_src: yes
+#   become: yes
+#   when: downloaded.changed
+
+
+- name: Git clone xatum-proxy
+  ansible.builtin.git:
+    repo: https://github.com/xelpool/xatum-proxy.git
+    dest: /opt/miners/xelis-proxy/xatum-proxy-src
+    version: "v{{ version }}"
+    force: yes
+  register: clone
+
+- name: Build xatum-proxy
+  block:
+    - name: Build xatum-proxy
+      ansible.builtin.shell:
+        chdir: /opt/miners/xelis-proxy/xatum-proxy-src
+        cmd: ./build.sh
+#  when: clone.changed
+
+# - name: Create xelis proxy service file
+#   ansible.builtin.template:
+#     src: xelis-proxy.service.j2
+#     dest: /etc/systemd/system/xelis-proxy.service
+#     mode: u=rw,g=r,o=rw
+#     owner: root
+#     group: root
+#   become: yes
+
+# - name: Start xelis proxy
+#   ansible.builtin.service:
+#     name: xelis-proxy
+#     enabled: yes
+#     state: "started"
+#   become: yes

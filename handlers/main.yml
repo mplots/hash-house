@@ -1,9 +1,7 @@
-# - name: Reload systemd
-#   systemd:
-#     name: "{{ item.key }}"
-#     state: reloaded
-#   loop: "{{ miners | dict2items }}"
-#   become: yes
+- name: Reload systemd
+  systemd:
+    state: reloaded
+  become: yes
 
 - name: Restart miners
   ansible.builtin.service:

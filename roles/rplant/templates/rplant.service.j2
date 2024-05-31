@@ -1,0 +1,16 @@
+[Unit]
+Description=Rplant Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+WorkingDirectory=/opt/miners/{{ miner_name }}
+ExecStart=/opt/miners/{{ miner_name }}/cpuminer-sse2 -a {{ miners.rplant.algorithm }} -t {{ miners.rplant.threads }} --cpu-affinity {{ miners.rplant.cpu_affinity }}  -o {{ miners.rplant.url }} -u {{ miners.rplant.wallet }}.{{ inventory_hostname }}
+StandardOutput=append:/opt/miners/{{ miner_name }}/miner.log
+StandardError=append:/opt/miners/{{ miner_name }}/miner.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

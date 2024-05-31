@@ -3,11 +3,20 @@ hashhouse:
     heisenberg:
       ansible_host: 192.168.8.200
       microarchitecture: znver3
+      cpu_affinity: 0x00000000855D4545
     jassie:
       ansible_host: 192.168.8.201
       microarchitecture: znver3
+      cpu_affinity: 0x00000000000007FE
+    # skyler:
+    #   ansible_host: 192.168.8.202
+    #   microarchitecture: znver3
+    #   cpu_affinity: 0x00000000000007FE
+    # saul:
+    #   ansible_host: saul.local
+    #   microarchitecture: znver3
 
-ryzen3950:
+octopus:
   hosts: 
     heisenberg:
     jassie:

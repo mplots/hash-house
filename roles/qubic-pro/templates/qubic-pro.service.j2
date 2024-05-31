@@ -1,0 +1,16 @@
+[Unit]
+Description=Qubic Pro Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+WorkingDirectory=/opt/miners/qubic-pro
+ExecStart=/opt/miners/qubic-pro/qpro-miner
+StandardOutput=append:/opt/miners/qubic-pro/miner.log
+StandardError=append:/opt/miners/qubic-pro/miner.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

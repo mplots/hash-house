@@ -1,0 +1,19 @@
+- name: Create miners group
+  ansible.builtin.group:
+    name: miners
+    system: yes
+    state: present
+
+- name: Add ubuntu user to miners group
+  ansible.builtin.user:
+    name: ubuntu
+    groups: miners
+    append: yes
+
+- name: Create a miner directory
+  ansible.builtin.file:
+    path: /opt/miners
+    state: directory
+    mode: u=rwx,g=rwx,o=
+    owner: ubuntu
+    group: miners

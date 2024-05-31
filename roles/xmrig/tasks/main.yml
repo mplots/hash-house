@@ -10,18 +10,18 @@
     name: xmrig
   become: yes
 
-# - name: Install xmrig build dependencies
-#   ansible.builtin.apt:
-#     name: "{{ item }}"
-#     state: present
-#     update_cache: yes
-#   with_items:
-#     - build-essential
-#     - cmake 
-#     - libuv1-dev 
-#     - libssl-dev 
-#     - libhwloc-dev
-#   become: yes
+- name: Install xmrig build dependencies
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - build-essential
+    - cmake 
+    - libuv1-dev 
+    - libssl-dev 
+    - libhwloc-dev
+  become: yes
 
 - name: Create xmrig miner directory
   ansible.builtin.file:
@@ -77,8 +77,7 @@
 
     - name: Reset local changes
       ansible.builtin.shell:
-        cmd: cd /opt/miners/xmrig/ && git reset --hard
-
+        cmd: cd /opt/miners/xmrig/xmrig-src && git reset --hard
   when: clone.changed
 
 - name: Copy xmrig config
@@ -90,15 +89,6 @@
     group: miners
   become: yes
 
-- name: Create log file
-  ansible.builtin.file:
-    dest: /var/log/xmrig.log
-    mode: u=rw,g=rw,o=r
-    owner: xmrig
-    group: miners
-    state: touch
-  become: yes
-
 - name: Create xmrig service file
   ansible.builtin.copy:
     src: xmrig.service
@@ -106,12 +96,4 @@
     mode: u=rw,g=r,o=r
     owner: root
     group: root
-  become: yes
-
-- name: Configure xmrig service
-  ansible.builtin.systemd_service:
-    name: xmrig
-    enabled: "{{ miners['xmrig'].enabled }}"
-    state: "{{ miners['xmrig'].state }}"
-    daemon_reload: true
   become: yes

@@ -1,0 +1,16 @@
+[Unit]
+Description=CPU Miner Flex Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+WorkingDirectory=/opt/miners/{{ miner_name }}
+ExecStart=/opt/miners/{{ miner_name }}/cpuminer -a flex -o {{ miners['cpuminer-flex'].url }} -u {{ miners['cpuminer-flex'].user }}.{{ inventory_hostname }}
+StandardOutput=append:/opt/miners/{{ miner_name }}/miner.log
+StandardError=append:/opt/miners/{{ miner_name }}/miner.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=Qubic Ninja Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+WorkingDirectory=/opt/miners/{{ miner_name }}
+ExecStart=/opt/miners/{{ miner_name }}/qubic.ninja -i={{ qubic_wallet }} -t={{ ansible_processor_cores * ansible_processor_threads_per_core }} -n={{ inventory_hostname }}
+StandardOutput=append:/opt/miners/{{ miner_name }}/miner.log
+StandardError=append:/opt/miners/{{ miner_name }}/miner.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,57 @@
+- name: Stop miner service
+  ansible.builtin.service:
+    name: "{{ miner_name }}"
+    state: stopped
+  ignore_errors: yes
+  become: yes
+
+- name: Create miner user
+  ansible.builtin.user:
+    name: "{{ miner_name }}"
+  become: yes
+
+- name: Create miner directory
+  ansible.builtin.file:
+    path: "/opt/miners/{{ miner_name }}"
+    state: directory
+    mode: u=rwx,g=rwx,o=
+    owner: "{{ miner_name }}"
+    group: miners
+  become: yes
+
+- name: Download miner
+  ansible.builtin.get_url:
+    url: "{{ miner_download_url }}"
+    dest: "/opt/miners/{{ miner_name }}/download.tar.gz"
+    mode: u=r,g=r,o=
+    owner: "{{ miner_name }}"
+    group: miners
+  register: downloaded
+  when: miner_download_url is defined
+  become: yes
+
+- name: Extract miner miner
+  ansible.builtin.unarchive:
+    src: "/opt/miners/{{ miner_name }}/download.tar.gz"
+    dest: "/opt/miners/{{ miner_name }}"
+    mode: u=rx,g=rx,o=
+    owner: "{{ miner_name }}"
+    group: miners
+    remote_src: yes
+  when: downloaded.changed and miner_download_url is defined
+  become: yes
+
+- name: Update miner service file
+  ansible.builtin.template:
+    src: "{{ miner_name }}.service.j2"
+    dest: "/etc/systemd/system/{{ miner_name }}.service"
+    mode: u=rw,g=r,o=rw
+    owner: root
+    group: root
+  register: service
+  become: yes
+
+- name: Reload systemd daemon
+  ansible.builtin.command: systemctl daemon-reload
+  when: service.changed
+  become: yes

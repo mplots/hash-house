@@ -1,0 +1,36 @@
+- name: Git clone miner
+  ansible.builtin.git:
+    repo: https://github.com/f1exlabs/cpuminer.git
+    dest: "/opt/miners/{{ miner_name }}/{{ miner_name }}-src"
+    version: "{{ version }}"
+    force: yes
+  register: clone
+  
+- name: Install miner build dependencies
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - libcurl4-openssl-dev
+    - libgmp3-dev
+    - zlib1g-dev
+  become: yes
+
+
+- name: Build miner
+  block:
+    - name: Compile miner
+      ansible.builtin.shell:
+        cmd: cd /opt/miners/{{ miner_name }}/{{ miner_name }}-src && ./build.sh
+
+    - name: Copy binary to miner folder
+      ansible.builtin.copy:
+        remote_src: yes
+        src: "/opt/miners/{{ miner_name }}/{{ miner_name }}-src/cpuminer"
+        dest: "/opt/miners/{{ miner_name }}"
+        mode: u=rx,g=rx,o=r
+        owner: "{{ miner_name }}"
+        group: miners
+      become: yes
+  when: clone.changed

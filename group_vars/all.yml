@@ -1,16 +1,59 @@
 qubic_wallet: QYBQUMAPZZTFCGGTGAUYUECQTLGCUXPOGBHVGPPNUECJXLOPUYPTQIDGQSQI
-qubic_li_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImM5ZmQyZDM3LWVkNzYtNGRjMy05NTM3LTI4OTcwNWEzMGRlOSIsIk1pbmluZyI6IiIsIm5iZiI6MTcxMjc3NDczNSwiZXhwIjoxNzQ0MzEwNzM1LCJpYXQiOjE3MTI3NzQ3MzUsImlzcyI6Imh0dHBzOi8vcXViaWMubGkvIiwiYXVkIjoiaHR0cHM6Ly9xdWJpYy5saS8ifQ.qEf4gO1Vota-hIRsd1Pa6h6e7dmjzC_rM9oWh1FOd56UpcPxttWcoPEkkgb6OAuo9sROdDSGH8HoVWluWZdHXw
+qubic_li_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImM5ZmQyZDM3LWVkNzYtNGRjMy05NTM3LTI4OTcwNWEzMGRlOSIsIk1pbmluZyI6IiIsIm5iZiI6MTcxMzMyOTgwMCwiZXhwIjoxNzQ0ODY1ODAwLCJpYXQiOjE3MTMzMjk4MDAsImlzcyI6Imh0dHBzOi8vcXViaWMubGkvIiwiYXVkIjoiaHR0cHM6Ly9xdWJpYy5saS8ifQ.kHKPdY9dhh20uk3MwE1jQxa9HZ2swy2ZCu59j16kIIQaOfRuW8iKNUbo15EM4b1xMSpj2dRKcd_dsW1mNE-RZA
+qubic_apool_subaccount: CP_ukc9fp6pu7
 
 miners:
+  qubic-ninja:
+
   qubic-li:
-    state: started
-    enabled: yes
+  
   qubic-solutions:
-    state: stopped
-    enabled: no
+
+  qubic-apool:
+
+  qubic-pro:
+  
   xmrig: 
-    state: stopped
-    enabled: no
-    url: de.zephyr.herominers.com:1124
-    user: ZEPHs8zp3a7gMhPpktyhtVbUM2RZrV8zfTGNYp2z1xrzgBJ9CwTxJqfjdAiQtB38NWP898JeoG9HQFuAbBSu2vQFQJ7kkqpFcJ3
+    
+    #ZEPH
+    url: fi.zephyr.herominers.com:1124
+    user: ZEPHYR31uHBPWg6F56nqNN7cvfajX2pJ2PiepXDKreYW5WwLDQRrgp16RcLUoJecSpMccB6Ey56X8Z4ZUdmco5v3JHVuB1L4pqE4h
+    
+    #QRL
+    #url:  de.qrl.herominers.com:1167
+    #user: Q0105003c8c8950ed585ef687f2cc66fdb96b2d8420e58e35d29851be327c1ab993328c766264d4
+
     pass: "{{ inventory_hostname }}"
+
+  rplant:
+
+    #Avian (AVN)
+    algorithm: "minotaurx"
+    url: "stratum+tcps://stratum-eu.rplant.xyz:17068"
+    wallet: "RERZNnkxH55oyT6AF4DLjhaVMzHPMXAohy"
+    cpu_affinity: "0x00000000FFFFFFFF"
+    threads: 32
+
+    #Quest Chain
+    # algorithm: "yespower"
+    # url: "stratum+tcps://stratum-eu.rplant.xyz:17122"
+    # wallet: "Qj5HE7GVcswLAjKcu6UfxjJe3Q6cPnSyWS"
+    # cpu_affinity: "{{ cpu_affinity }}"
+    # threads: 10
+
+    #Tidecoin
+    # algorithm: "yespowertide"
+    # url: "stratum+tcps://stratum-eu.rplant.xyz:17059"
+    # wallet: "THmkWNkhDqFcqSD6dc63yq8rMdj7TVPQiw"
+    # cpu_affinity: 0x00000000FFFFFFFF
+    # threads: 32
+
+  srb:
+    url: "stratum+tcps://stratum-eu.rplant.xyz:17122"
+    user: "Qj5HE7GVcswLAjKcu6UfxjJe3Q6cPnSyWS"
+
+  cpuminer-flex:
+    url: "stratum+ssl://eu.mpool.live:6486"
+    user: "tkc1q8vh3gvvkucsrtf4a3e2f3rer24jpd208hhkgxs"
+
+active_miner: xmrig

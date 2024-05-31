@@ -1,0 +1,4 @@
+- name: Update number of huge pages
+  ansible.builtin.shell:
+    cmd: "/sbin/sysctl -w vm.nr_hugepages={{ 277 * ansible_processor_cores * ansible_processor_threads_per_core }}"
+  become: yes

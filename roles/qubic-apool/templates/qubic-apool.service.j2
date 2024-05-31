@@ -1,0 +1,15 @@
+[Unit]
+Description=Qubic Apool Daemon
+After=network.target
+
+[Service]
+Type=simple
+GuessMainPID=no
+ExecStart=/opt/miners/qubic-apool/apoolminer/apoolminer --account {{ qubic_apool_subaccount }} --worker {{ inventory_hostname }} --pool qubic1.hk.apool.io:3334 -t 25 --gpu-off
+StandardOutput=append:/var/log/qubic-apool.log
+StandardError=append:/var/log/qubic-apool.log
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

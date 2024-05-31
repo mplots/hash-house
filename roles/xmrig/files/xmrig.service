@@ -3,11 +3,11 @@ Description=XMRig Daemon
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 GuessMainPID=no
 ExecStart=/opt/miners/xmrig/xmrig -c /opt/miners/xmrig/config.json -l /var/log/xmrig.log -B
 Restart=always
-User=ubuntu
+User=root
 
 [Install]
 WantedBy=multi-user.target

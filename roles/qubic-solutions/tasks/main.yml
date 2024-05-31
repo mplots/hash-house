@@ -21,16 +21,5 @@
     mode: u=rw,g=r,o=rw
     owner: root
     group: root
-  become: yes
-
-- name: Enable qubic-solutions service
-  ansible.builtin.service:
-    name: qubic-solutions
-    enabled: "{{ miners['qubic-solutions'].enabled }}"
-  become: yes
-
-- name: Start qubic-solutions service
-  ansible.builtin.service:
-    name: qubic-solutions
-    state: "{{ miners['qubic-solutions'].state }}"
+  notify: Reload systemd
   become: yes
